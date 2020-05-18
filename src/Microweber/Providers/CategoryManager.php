@@ -614,7 +614,7 @@ class CategoryManager
             and (!isset($data['url']) or trim($data['url']) == false)
             and isset($data['title'])
         ) {
-            $data['url'] = $data['title'];
+            $data['url'] = url_title($data['title']);
         }
 
         $old_parent = false;
@@ -626,7 +626,8 @@ class CategoryManager
         }
 
         if (isset($data['url']) and trim($data['url']) != false) {
-            $possible_slug = $this->app->url_manager->slug($data['url']);
+            $possible_slug = mb_strtolower($data['url']);
+            $possible_slug = str_ireplace(" ", "-", $possible_slug);
             if ($possible_slug) {
                 $possible_slug_check = $this->get_by_slug($possible_slug);
                 if (isset($possible_slug_check['id'])) {
